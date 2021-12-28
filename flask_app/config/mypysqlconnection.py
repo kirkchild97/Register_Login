@@ -14,3 +14,23 @@ class mySQLConnection:
         self.connection = connection
 
     def query_db(self, query : str, data : dict = None):
+        with self.connection.cursor() as cursor:
+            try:
+                query = cursor.mogrify(query, data)
+                print(f"Running Query: {query}")
+                cursor.execute(query, data)
+                if query.lower().find('insert') >= 0:
+                    self.connection.commit()
+                    return cursor.lastrowid
+                elif query.lower().find('select') >= 0:
+                    results = cursor.fetchall()
+                    return results
+                else:
+                    self.connection.commit()
+            except Exception as e:
+                print(f"Something went Wrong: {e}")
+            finally:
+                self.connection.close()
+
+def connectToMySQL(db) -> mySQLConnection:
+    return mySQLConnection(db)
