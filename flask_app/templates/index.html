@@ -10,12 +10,19 @@
 <body>
 <h1 class="text-center">Welcome to the Website!</h1>
 <div class="container row mx-auto">
-    <form class="col card card-text bg-dark mx-5" action="/try/login" method="post">
+    <form class="col card card-text bg-dark mx-5" action="/try/register" method="post">
         <h2 class="text-danger">Register</h2>
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="text-light">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
         <label class="text-danger mt-2" for="first_name">First Name:</label>
         <input type="text" name="first_name" id="first_name">
         <label class="text-danger mt-2" for="last_name">Last Name:</label>
         <input type="text" name="last_name" id="last_name">
+        <label class="text-danger" for="email">Email</label>
+        <input type="email" name="email" id="email">
         <label class="text-danger" for="password">Password:</label>
         <input type="password" name="password" id="password">
         <label class="text-danger" for="repeat_password">Repeat Password:</label>
@@ -24,18 +31,20 @@
         <input type="date" name="dob" id="dob">
         <label class="text-danger mt-2" for="is_seller">Are you a Seller or a Buyer?</label>
         <label class="text-danger mt-2" for="seller">Seller
-            <input type="radio" name="is_seller" id="seller">
+            <input type="radio" name="is_seller" id="seller" value="1">
         </label>
         <label class="text-danger mt-2" for="buyer">Buyer
-            <input type="radio" name="is_seller" id="buyer">
+            <input type="radio" name="is_seller" id="buyer" value="0">
         </label>
+        <input class="btn btn-dark text-danger border-3 border-danger mt-3" type="submit" value="Register">
     </form>
-    <form class="col card card-text bg-primary mx-5" action="/try/register" method="post">
+    <form class="col card card-text bg-primary mx-5" action="/try/login" method="post">
         <h2 class="text-warning">Login</h2>
-        <label class="text-warning" for="first_name">First Name:</label>
-        <input type="text" name="first_name" id="first_name">
+        <label class="text-warning" for="email">Email:</label>
+        <input type="email" name="email" id="email">
         <label class="text-warning" for="password">Password:</label>
         <input type="password" name="password" id="password">
+        <input class="btn btn-primary text-warning border-3 border-warning mt-3" type="submit" value="Login">
     </form>
 </div>
 </body>
