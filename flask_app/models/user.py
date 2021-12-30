@@ -42,13 +42,20 @@ class User:
         connect('users').query_db(query, data)
     
     @classmethod
-    def get_user(cls, email : str, password : str) -> User_Data:
-        data = { 'email' : email, 'password' : password}
-        query = '''SELECT first_name, last_name, email, is_seller from users
-        WHERE email = "%(email)s" AND password = "%(password)s;"'''
+    def get_user_data(cls, email : str) -> User_Data:
+        data = { 'email' : email}
+        query = '''SELECT id, email, password from users
+        WHERE email = %(email)s'''
         results = connect('users').query_db(query, data)
         if results == None:
             flash('Your email or password does not match our records. Please try again')
             return False
         else:
-            return User_Data(results)
+            return results[0]
+
+    @classmethod
+    def get_user(cls, data):
+        query = '''SELECT first_name, last_name, email, is_seller FROM users
+        WHERE id = %(id)s;'''
+        results = connect('users').query_db(query, data)
+        return results[0]

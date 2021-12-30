@@ -31,8 +31,26 @@ def registered():
 
 @app.route('/try/login', methods=['POST'])
 def try_login():
-    pass
+    user = User.get_user_data(request.form['email'])
+    if bcrypt.check_password_hash(user['password'], request.form['password']):
+        data = User.get_user({'id' : user['id']})
+        session['first_name'] = data['first_name']
+        session['last_name'] = data['last_name']
+        session['email'] = data['email']
+        session['is_seller'] = data['is_seller']
+        session['logged_in'] = True
+        return redirect('/loginsuccess')
+    else:
+        return redirect('/')
 
 @app.route('/loginsuccess')
-def logged_in(success : bool):
-    pass
+def logged_in():
+    if session['logged_in']:
+        return render_template('loginSuccess.html', user = session)
+    else:
+        return redirect('/')
+
+@app.route('/logout')
+def log_out():
+    session.clear()
+    return redirect('/')
